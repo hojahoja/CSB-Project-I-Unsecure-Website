@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Guestbook</title>
+</head>
+<body>
+<!--Remove the line below to fix FLAW2-->
+{% autoescape off %}
+    <div style="display: flex; gap: 10px">
+        <a href="/polls/guestbook/">guestbook</a>
+        <a href="/polls/">polls</a>
+        {% if user.is_authenticated %}
+            <form action="/polls/logout/" method="post">
+                {% csrf_token %}
+                <input type="submit" value="logout">
+            </form>
+        {% endif %}
+    </div>
+    <h1>Guestbook</h1>
+
+
+    <h3>Post a message to guestbook:</h3>
+    <form action="/polls/guestbook/add/" method="post">
+        <!-- remove these two surrounding lines...
+        {% csrf_token %}
+        to activate the csrf_token -->
+        Name: <br> <input type="text" name="name"><br>
+
+        Message: <br>
+
+        <textarea name="message" cols="30" rows="10"></textarea><br>
+        <input type="submit" value="Send">
+    </form>
+
+    <h3>Filter by sender</h3>
+    <form action="/polls/guestbook/filter/" method="post">
+        <!-- remove these two surrounding lines...
+        {% csrf_token %}
+        to activate the csrf_token -->
+        Name: <br> <input type="text" name="name" value=""><br>
+
+        <input type="submit" value="Send">
+    </form>
+
+    <h2>Messages:</h2>
+    <ul style="list-style-type: none;">
+        {% for message in messages %}
+            <li><strong>{{ message.name }}</strong> says: <br>{{ message.message_text }}</li>
+            <br>
+        {% endfor %}
+    </ul>
+<!--Remove the line below to fix FLAW2-->
+{% endautoescape %}
+</body>
+</html>

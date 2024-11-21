@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Polls App</title>
+</head>
+<body>
+<div style="display: flex; gap: 10px">
+    <a href="/polls/guestbook/">guestbook</a>
+    <a href="/polls/">polls</a>
+    {% if user.is_authenticated %}
+    <form action="/polls/logout/" method="post">
+        {% csrf_token %}
+        <input type="submit" value="logout">
+    </form>
+    {% endif %}
+</div>
+<div>
+    {% if latest_question_list %}
+        <ul>
+            {% for question in latest_question_list %}
+                <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+</div>
+</body>
+</html>

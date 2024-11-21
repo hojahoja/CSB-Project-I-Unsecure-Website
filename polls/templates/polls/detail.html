@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Poll detail</title>
+</head>
+<body>
+<div style="display: flex; gap: 10px">
+    <a href="/polls/guestbook/">guestbook</a>
+    <a href="/polls/">polls</a>
+    {% if user.is_authenticated %}
+        <form action="/polls/logout/" method="post">
+            {% csrf_token %}
+            <input type="submit" value="logout">
+        </form>
+    {% endif %}
+</div>
+<form method="post" action="{% url 'polls:vote' question.id %}">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>{{ question.question_text }}</h1></legend>
+        {% if error_message %}
+        	<p><strong>{{ error_message }}</strong></p>
+        {% endif %}
+        {% for choice in question.choice_set.all %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endfor %}
+    </fieldset>
+    <input type="submit" value="Vote">
+</form>
+
+
+</body>
+</html>
